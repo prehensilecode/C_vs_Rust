@@ -1,4 +1,5 @@
-use std::time::{Duration, Instant};
+//use std::time::{Duration, Instant};
+use std::time::Instant;
 use rand::Rng;
 const SIZE:usize = 10000;
 fn create_array() -> [i32; SIZE] {
@@ -110,6 +111,9 @@ fn move_down(myarray: &mut [i32], mut root: usize) {
     }
 }
 
+pub fn print_result(name: &str, dur: f32, len: usize) {
+    println!("Time elapsed in {} is: {:.6} sec for {:?}", name, dur, len);
+}
 
 fn main() {
     let arr = create_array();
@@ -118,30 +122,34 @@ fn main() {
     let mut start = Instant::now();
     bubble_sort(bubble);
     let mut duration = start.elapsed();
-    println!("Time elapsed in bubble sort is: {:.6} sec for {:?}", duration.as_secs_f32() , arr.len());
+    //println!("Time elapsed in bubble sort is: {:.6} sec for {:?}", duration.as_secs_f32() , arr.len());
+    print_result("bubble sort", duration.as_secs_f32(), arr.len());
     
     let insertion = arr;
     start = Instant::now();
     insertion_sort(insertion);
     duration = start.elapsed();
-    println!("Time elapsed in insertion sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    //println!("Time elapsed in insertion sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    print_result("insertion sort", duration.as_secs_f32(), arr.len());
     
     let selection = arr;
     start = Instant::now();
     selection_sort(selection);
     duration = start.elapsed();
-    println!("Time elapsed in selection sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    //println!("Time elapsed in selection sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    print_result("selection sort", duration.as_secs_f32(), arr.len());
 
     let shell = arr;
     start = Instant::now();
     shell_sort(shell);
     duration = start.elapsed();
-    println!("Time elapsed in shell sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    //println!("Time elapsed in shell sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    print_result("shell sort", duration.as_secs_f32(), arr.len());
 
     let mut heap_arr= arr;
     start = Instant::now();
     heap_sort(&mut heap_arr);
     duration = start.elapsed();
-    println!("Time elapsed in heap sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
-
+    //println!("Time elapsed in heap sort is: {:.6} sec for {:?}", duration.as_secs_f32(), arr.len());
+    print_result("heap sort", duration.as_secs_f32(), arr.len());
 }
