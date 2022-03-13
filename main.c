@@ -152,6 +152,65 @@ void heapsort1(int a[],int n)
     }
 }
 
+
+// quicksort (via libc)
+int compare(const void *a,const void *b)
+{
+  return (*(int*)a - *(int*)b);
+}
+
+void quicksort_libc(int a[],int n)
+{
+  qsort(a, (size_t)n, sizeof(int), compare);
+}
+
+
+// quicksort from https://www.programiz.com/dsa/quick-sort
+void qsswap(int *a,int *b)
+{
+    // not used; use the swap() macro defined above
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition(int a[],int low,int high)
+{
+    int temp;
+    int pivot = a[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++)
+    {
+        if (a[j] <= pivot)
+        {
+            i++;
+            qsswap(&a[i], &a[j]);
+        }
+    }
+
+    //swap(a[i+1],a[high],temp);
+    qsswap(&a[i+1],&a[high]);
+    return (i+1);
+}
+
+void quicksort(int a[],int n)
+{
+    int low = 0;
+    int high = n-1;
+    if (low < high)
+    {
+        int piv = partition(a, low, high);
+        quicksort(&a[low], piv-1);
+        quicksort(&a[piv+1], high-piv-1);
+    }
+}
+
+void print_result(const char *name,double elapsed,int size)
+{
+    printf("Time taken by %s is %0.6lf secs for %d\n",name,elapsed,size);
+}
+
+
 //Main 
 int main()
 {
@@ -165,8 +224,7 @@ int main()
     bubblesort(bubble,SIZE);
     end=clock();
     elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
-    printf("\nTime taken by bubble sort is");
-    printf(" %0.4lf secs\n",elapsed_T);
+    print_result("bubble sort", elapsed_T,SIZE);
 
 
     int insertion[SIZE - 1];
@@ -175,8 +233,7 @@ int main()
     insertionsort(insertion,SIZE);
     end=clock();
     elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
-    printf("\nTime taken by insertion sort is");
-    printf(" %0.4lf secs\n",elapsed_T);
+    print_result("insertion sort",elapsed_T,SIZE);
 
 
     int selection[SIZE - 1];
@@ -185,8 +242,7 @@ int main()
     selectionsort(insertion,SIZE);
     end=clock();
     elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
-    printf("\nTime taken by selection sort is");
-    printf(" %0.4lf secs\n",elapsed_T);
+    print_result("selection sort",elapsed_T,SIZE);
 
 
     int shell[SIZE - 1];
@@ -195,8 +251,7 @@ int main()
     shellsort(shell,SIZE);
     end=clock();
     elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
-    printf("\nTime taken by shell sort is");
-    printf(" %0.4lf secs\n",elapsed_T);
+    print_result("shell sort",elapsed_T,SIZE);
 
     int heap[SIZE - 1];
     copyarray(myArray,heap,SIZE);
@@ -204,7 +259,33 @@ int main()
     heapsort1(heap,SIZE);
     end=clock();
     elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
-    printf("\nTime taken by heap sort is");
-    printf(" %0.4lf secs\n",elapsed_T);
+    print_result("heap sort",elapsed_T,SIZE);
+
+    int quicklibc[SIZE - 1];
+    copyarray(myArray,quicklibc,SIZE);
+    begin=clock();
+    quicksort_libc(quicklibc,SIZE);
+    end=clock();
+    elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
+    print_result("quicksort (libc)",elapsed_T,SIZE);
+
+    int quick[SIZE - 1];
+    copyarray(myArray,quick,SIZE);
+    begin=clock();
+    quicksort_libc(quick,SIZE);
+    end=clock();
+    elapsed_T=(((double)end-begin)/CLOCKS_PER_SEC);
+    print_result("quicksort",elapsed_T,SIZE);
+
+#ifdef DEBUG
+    // check
+    int check = 0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        check += quick[i] - quicklibc[i];
+    }
+    printf("check = %d\n", check);
+#endif
+
     return 0;
 }

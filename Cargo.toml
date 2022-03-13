@@ -1,0 +1,14 @@
+[package]
+name = "sorts"
+version = "0.0.1"
+authors = ["imrushabh"]
+edition = "2021"
+
+[[bin]]
+name = "rustsorts"
+path = "main.rs"
+test = false
+bench = false
+
+[dependencies]
+rand = "0.8.5"
